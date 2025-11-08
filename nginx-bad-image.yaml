@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-bad-image
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: nginx-bad-image }
+  template:
+    metadata:
+      labels: { app: nginx-bad-image }
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:this-tag-does-not-exist
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
