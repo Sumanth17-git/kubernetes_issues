@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+---
+#nginx-crashloop
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-crashloop
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: nginx-crashloop }
+  template:
+    metadata:
+      labels: { app: nginx-crashloop }
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27
+        command: ["/bin/sh","-c"]
+        args: ["echo 'crashing intentionally'; exit 1"]
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
